@@ -27,6 +27,9 @@ def generate_pw():
 
 def generate_virtual_number():
     if randint(0, 1)==0:
-        return generate_phone
+        return generate_phone()
     else: 
         return ''
+    
+def random_int(start = 0, end = 10):
+    return randint(start, end)
