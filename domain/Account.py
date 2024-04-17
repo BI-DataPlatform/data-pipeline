@@ -3,10 +3,6 @@ from datetime import datetime
 import uuid
 from .Payment import get_payment
 
-import os
-import sys
-
-
 
 @dataclasses.dataclass
 class Account:
@@ -17,7 +13,7 @@ class Account:
     id: str = uuid.uuid4().__str__()    # uuid4번 참고 https://docs.python.org/ko/3/library/uuid.html
     virtual_number: str=""
     payment: str = get_payment()
-    family_account_id: str =""
+    family_account_id: str =""   # nullable
     points: int = 0
     rank: str = ""
     role: str = ""
