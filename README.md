@@ -7,8 +7,10 @@
   - pymysql \
      `pip install pymysql`
   - SQLAlchemy \
-     ` pip install sqlalchemy`
+     `pip install sqlalchemy`
   - 한글 이름 랜덤 생성기 \
-     ` pip install korean-name-generator`
+     `pip install korean-name-generator`
   - 엑셀 파일 읽기 \
-     ` pip install pandas`
+     `pip install pandas`
+  - (option) 메모리 사용량 기록 \
+     `pip install memory-profiler`

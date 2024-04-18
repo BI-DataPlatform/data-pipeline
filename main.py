@@ -1,9 +1,12 @@
+from memory_profiler import profile
 from utils.RandomGenerator import *
 from domain.Account import Account
 from domain.FamilyAccount import FamilyAccount
 from domain.Address import Address
 import pandas as pd
 import sqlalchemy
+
+import time # 실행 시간 측정용
 
 def get_connection():
     id = 'root'
@@ -12,7 +15,7 @@ def get_connection():
     port = '30829'
     db = 'data'
     return sqlalchemy.create_engine("mysql+pymysql://" + id + ":" + passwd + "@" 
-                                    + host + ":" + port + "/" + db+'?charset=utf8mb4')
+                                    + host + ":" + port + "/" + db+'?charset=utf8mb4').connect()
 
 # class to ddl 자동 생성 해보려고했는데 varchar length 자동 지정이 안되어서 포기
 # def generate_table_create_query(class_type):
@@ -40,7 +43,7 @@ def get_connection():
 #     else:
 #         raise ValueError(f"Unsupported data type: {data_type}")
 
-def create_schema(engine: sqlalchemy.Engine):
+def create_schema(connection: sqlalchemy.Connection):
     # schema.sql 파일 읽기
     with open('./schema.sql', 'r') as file:
         queryies = file.read().split(';')
@@ -50,16 +53,10 @@ def create_schema(engine: sqlalchemy.Engine):
     
     # ddl 실행 : mysql은 한번에 한 쿼리만 실행 가능해서 for문으로 돌림.
     for query in queryies:
-        engine.connect().execute(sqlalchemy.text(query))
+        connection.execute(sqlalchemy.text(query))
 
-if __name__ == '__main__':
-    DATA_ROWS=10000
-    
-    engine = get_connection()
-    
-    # 테이블 생성 및 기본 키 설정
-    create_schema(engine)
-        
+@profile
+def generate_data(connection: sqlalchemy.Connection):
     accounts = []
     family_accounts = []
     addresses = []
@@ -120,7 +117,30 @@ if __name__ == '__main__':
     # print(family_account_df)
     # print(address_df)
 
-    account_df.to_sql(name='accounts', con=engine, index=False, if_exists='append')
-    family_account_df.to_sql(name='family_accounts', con=engine, index=False, if_exists='append')
-    address_df.to_sql(name='addresses', con=engine, index=False, if_exists='append')
+    account_df.to_sql(name='accounts', con=connection, index=False, if_exists='append')
+    family_account_df.to_sql(name='family_accounts', con=connection, index=False, if_exists='append')
+    address_df.to_sql(name='addresses', con=connection, index=False, if_exists='append')
+
+if __name__ == '__main__':
     
+    # 시작 시간 기록
+    start_time = time.time()
+    
+    DATA_ROWS=100000
+    
+    connection = get_connection()
+    
+    # 테이블 생성 및 기본 키 설정
+    create_schema(connection)
+    
+    # 데이터 생성 및 메모리 사용량 추적
+    generate_data(connection)
+    
+    connection.close()
+    
+    # 종료 시간 기록
+    end_time = time.time()
+
+    # 실행 시간 계산
+    execution_time = end_time - start_time
+    print("Execution time:", execution_time, "seconds")

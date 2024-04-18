@@ -12,7 +12,7 @@ class Account:
     phone_number: str 
     id: str = None
     virtual_number: str=""
-    payment: str = get_payment()
+    payment: str = None
     family_account_id: str =""   # nullable
     points: int = 0
     rank: str = ""
@@ -23,6 +23,8 @@ class Account:
     def __post_init__(self):
         if self.id is None:
             self.id = uuid.uuid4().__str__()  # uuid4번 참고 https://docs.python.org/ko/3/library/uuid.html
+        if self.payment is None:
+            self.payment = get_payment()
             
     @classmethod
     def from_dict(self, d):
