@@ -8,14 +8,14 @@ import sqlalchemy
 
 import time # 실행 시간 측정용
 
-def get_connection():
+def get_engine():
     id = 'root'
     passwd = 'root'
     host ='192.168.122.110'
     port = '30829'
     db = 'data'
     return sqlalchemy.create_engine("mysql+pymysql://" + id + ":" + passwd + "@" 
-                                    + host + ":" + port + "/" + db+'?charset=utf8mb4').connect()
+                                    + host + ":" + port + "/" + db+'?charset=utf8mb4')
 
 # class to ddl 자동 생성 해보려고했는데 varchar length 자동 지정이 안되어서 포기
 # def generate_table_create_query(class_type):
@@ -54,15 +54,17 @@ def create_schema(connection: sqlalchemy.Connection):
     # ddl 실행 : mysql은 한번에 한 쿼리만 실행 가능해서 for문으로 돌림.
     for query in queryies:
         connection.execute(sqlalchemy.text(query))
+    
+    connection.close()
 
 @profile
-def generate_data(connection: sqlalchemy.Connection):
+def generate_data(rows, connection: sqlalchemy.Engine):
     accounts = []
     family_accounts = []
     addresses = []
     address_table = get_address_table('./utils/주소.xlsx')
     
-    for i in range(DATA_ROWS):
+    for i in range(rows):
         # make account
         account = Account(
             email=generate_email(),
@@ -126,17 +128,16 @@ if __name__ == '__main__':
     # 시작 시간 기록
     start_time = time.time()
     
-    DATA_ROWS=100000
+    DATA_ROWS=30000
     
-    connection = get_connection()
+    engine = get_engine()
     
     # 테이블 생성 및 기본 키 설정
-    create_schema(connection)
+    create_schema(engine.connect())
     
     # 데이터 생성 및 메모리 사용량 추적
-    generate_data(connection)
-    
-    connection.close()
+    generate_data(DATA_ROWS, engine)
+    engine.dispose()
     
     # 종료 시간 기록
     end_time = time.time()
