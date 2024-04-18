@@ -1,4 +1,3 @@
-from memory_profiler import profile
 from utils.RandomGenerator import *
 from domain.Account import Account
 from domain.FamilyAccount import FamilyAccount
@@ -7,6 +6,7 @@ import pandas as pd
 import sqlalchemy
 
 import time # 실행 시간 측정용
+from memory_profiler import profile # 메모리 측정용
 
 def get_engine():
     id = 'root'
