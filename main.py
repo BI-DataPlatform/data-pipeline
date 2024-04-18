@@ -2,12 +2,16 @@ from utils.RandomGenerator import *
 from domain.Account import Account
 from domain.FamilyAccount import FamilyAccount
 from domain.Address import Address
+from services import MySQLConnection
 
 if __name__ == '__main__':
+    DATA_ROWS=1
+    
+    
     family_accounts = []
     address_table = get_address_table('./utils/주소.xlsx')
     
-    for i in range(10):
+    for i in range(DATA_ROWS):
         # make account
         account = Account(
             email=generate_email(),
@@ -50,3 +54,6 @@ if __name__ == '__main__':
         print(family_account)
         print(address)
         print('-------')
+
+    engine = MySQLConnection.get_connection()
+    
