@@ -14,3 +14,7 @@
      `pip install pandas`
   - (option) 메모리 사용량 기록 \
      `pip install memory-profiler`
+- 폴더 구조 설명
+  - domain : 각 테이블의 class 파일
+  - utils : random generate 함수
+  - main.py : 실행 파일
