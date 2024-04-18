@@ -7,8 +7,14 @@ from .Payment import get_payment
 class FamilyAccount:
     account_id: str
     orders_left: str
+    id: str = None
     payment: str = get_payment()
-    id: str = uuid.uuid4().__str__()    # uuid4번 참고 https://docs.python.org/ko/3/library/uuid.html
     created_on: datetime = datetime.now()
     last_updated_on: datetime = datetime.now()
 
+    def __post_init__(self):
+        if self.id is None:
+            self.id = uuid.uuid4().__str__()  # uuid4번 참고 https://docs.python.org/ko/3/library/uuid.html
+            
+    def to_dict(self):
+        return dataclasses.asdict(self)

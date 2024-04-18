@@ -10,7 +10,7 @@ class Account:
     password: str
     nickname: str 
     phone_number: str 
-    id: str = uuid.uuid4().__str__()    # uuid4번 참고 https://docs.python.org/ko/3/library/uuid.html
+    id: str = None
     virtual_number: str=""
     payment: str = get_payment()
     family_account_id: str =""   # nullable
@@ -20,6 +20,10 @@ class Account:
     created_on: datetime = datetime.now()
     last_updated_on: datetime = datetime.now()
     
+    def __post_init__(self):
+        if self.id is None:
+            self.id = uuid.uuid4().__str__()  # uuid4번 참고 https://docs.python.org/ko/3/library/uuid.html
+            
     @classmethod
     def from_dict(self, d):
         return self(**d)
