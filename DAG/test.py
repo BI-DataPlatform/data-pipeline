@@ -23,7 +23,7 @@ from datetime import datetime, timedelta
 # );
 
 id = uuid4().__str__()
-now = datetime.now().__str__()
+now = datetime.now().strftime("%Y-%m-%d %H:%M:%S").__str__()
 default_args = {
     'start_date': datetime.today()
 }
