@@ -17,32 +17,6 @@ def get_engine():
     return sqlalchemy.create_engine("mysql+pymysql://" + id + ":" + passwd + "@" 
                                     + host + ":" + port + "/" + db+'?charset=utf8mb4')
 
-# class to ddl 자동 생성 해보려고했는데 varchar length 자동 지정이 안되어서 포기
-# def generate_table_create_query(class_type):
-#     columns = []
-#     for field in class_type.__dataclass_fields__.values():
-#         if field.name == 'email':
-#             max_length = 50 
-#         elif field.name == 'name' :
-#             max_length = 20
-#         else : 
-#             max_length = 64
-#         columns.append(f"{field.name} {get_sqlalchemy_type(field.type, max_length)}")
-#     return f"CREATE TABLE {class_type.__name__.lower()} ({', '.join(columns)});"
-
-# def get_sqlalchemy_type(data_type, max_length=None):
-#     if data_type == int:
-#         return "INTEGER"
-#     elif data_type == str:
-#         if max_length:
-#             return f"VARCHAR({max_length})"
-#         else:
-#             return "TEXT"
-#     elif data_type == bool:
-#         return "BOOLEAN"
-#     else:
-#         raise ValueError(f"Unsupported data type: {data_type}")
-
 def create_schema(connection: sqlalchemy.Connection):
     # schema.sql 파일 읽기
     with open('./schema.sql', 'r') as file:
