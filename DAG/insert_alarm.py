@@ -6,6 +6,12 @@ from uuid import uuid4
 from datetime import datetime, timedelta
 import random
 
+default_args = {
+    'start_date': datetime.today()
+}
+id = uuid4().__str__()
+now = datetime.now().strftime("%Y-%m-%d %H:%M:%S").__str__()
+
 
 with DAG(
     'insert_alarm',
@@ -34,14 +40,6 @@ with DAG(
         python_callable=print_account_data,
         provide_context=True  # context 제공을 위한 옵션
     )
-
-
-
-    id = uuid4().__str__()
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S").__str__()
-    default_args = {
-        'start_date': datetime.today()
-    }
 
     t3 = MySqlOperator(
         task_id="insert_alarm_data",
