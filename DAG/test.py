@@ -40,7 +40,7 @@ with DAG(
     tags = ['mysql', 'test', 'alarms']
 ) as dag:
     t2 = MySqlOperator(
-        task_id="insert_employees_data",
+        task_id="insert_alarm_data",
         mysql_conn_id="mysql",
         sql='insert into `alarms` values ('+id+',`000164ff-ce67-4836-a219-0857d7530e76`, `test_title`, `test_content`, `test_link`, '+now+', '+now+' );'
     )
