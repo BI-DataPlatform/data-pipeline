@@ -29,7 +29,6 @@ with DAG(
         task_id="select_random_account_data",
         mysql_conn_id="mysql",
         sql="SELECT id FROM accounts ORDER BY RAND() LIMIT 1;",
-        result_set_task_id="account_data"
     )
 
 
