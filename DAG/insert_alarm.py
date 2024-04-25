@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 import random
 
 default_args = {
-    'start_date': datetime.today()
+    'start_date': datetime.now()
 }
 id = uuid4().__str__()
 now = datetime.now().strftime("%Y-%m-%d %H:%M:%S").__str__()
