@@ -30,15 +30,16 @@ with DAG(
     )
 
 
-    def print_account_data(**context):
-        account_data = context['task_instance'].xcom_pull(task_ids="select_random_account_data", key="return_value")
-        print("Random account data:", account_data)
+    ## 로그 출력 용 중간 단계
+    # def print_account_data(**context):
+    #     account_data = context['task_instance'].xcom_pull(task_ids="select_random_account_data", key="return_value")
+    #     print("Random account data:", account_data)
 
-    t2 = PythonOperator(
-        task_id="print_account_data",
-        python_callable=print_account_data,
-        provide_context=True  # context 제공을 위한 옵션
-    )
+    # t2 = PythonOperator(
+    #     task_id="print_account_data",
+    #     python_callable=print_account_data,
+    #     provide_context=True  # context 제공을 위한 옵션
+    # )
 
     t3 = MySqlOperator(
         task_id="insert_alarm_data",
@@ -46,7 +47,8 @@ with DAG(
         sql="INSERT INTO alarms VALUES ('{}','{{{{ task_instance.xcom_pull(task_ids=\"select_random_account_data\",  key=\"return_value\")[0][0] }}}}', 'test_title', 'test_content', 'test_link', '{}', '{}');".format(id, now, now)
     )
 
-    t1 >> t2 >> t3
+    t1 >> t3
+    # t1 >> t2 >> t3
     
     
     
