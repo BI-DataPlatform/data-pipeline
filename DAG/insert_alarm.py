@@ -7,13 +7,6 @@ from datetime import datetime, timedelta
 import random
 
 
-id = uuid4().__str__()
-now = datetime.now().strftime("%Y-%m-%d %H:%M:%S").__str__()
-default_args = {
-    'start_date': datetime.today()
-}
-
-
 with DAG(
     'insert_alarm',
     default_args = default_args,
@@ -42,10 +35,18 @@ with DAG(
         provide_context=True  # context 제공을 위한 옵션
     )
 
+
+
+    id = uuid4().__str__()
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S").__str__()
+    default_args = {
+        'start_date': datetime.today()
+    }
+
     t3 = MySqlOperator(
         task_id="insert_alarm_data",
         mysql_conn_id="mysql",
-        sql="""INSERT INTO alarms VALUES ('{id}','{{ task_instance.xcom_pull(task_ids=\"select_random_account_data\",  key=\"return_value\")[0][0] }}', 'test_title', 'test_content', 'test_link', '{now}', '{now}');"""
+        sql=f"""INSERT INTO alarms VALUES ('{id}','{{ task_instance.xcom_pull(task_ids=\"select_random_account_data\",  key=\"return_value\")[0][0] }}', 'test_title', 'test_content', 'test_link', '{now}', '{now}');"""
     )
 
     t1 >> t2 >> t3
