@@ -12,7 +12,6 @@ default_args = {
 id = uuid4().__str__()
 now = datetime.now().strftime("%Y-%m-%d %H:%M:%S").__str__()
 
-
 with DAG(
     'insert_alarm',
     default_args = default_args,
@@ -44,7 +43,7 @@ with DAG(
     t3 = MySqlOperator(
         task_id="insert_alarm_data",
         mysql_conn_id="mysql",
-        sql=f"""INSERT INTO alarms VALUES ('{id}','{{ task_instance.xcom_pull(task_ids=\"select_random_account_data\",  key=\"return_value\")[0][0] }}', 'test_title', 'test_content', 'test_link', '{now}', '{now}');"""
+        sql="""INSERT INTO alarms VALUES ('{}','{{ task_instance.xcom_pull(task_ids=\"select_random_account_data\",  key=\"return_value\")[0][0] }}', 'test_title', 'test_content', 'test_link', '{}', '{}');""".format(id, now, now)
     )
 
     t1 >> t2 >> t3
