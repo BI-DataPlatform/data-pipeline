@@ -45,7 +45,7 @@ with DAG(
     t3 = MySqlOperator(
         task_id="insert_alarm_data",
         mysql_conn_id="mysql",
-        sql="""INSERT INTO alarms VALUES ('{id}','{{ task_instance.xcom_pull(task_ids=\"select_random_account_data\",  key=\"return_value\") }}', 'test_title', 'test_content', 'test_link', '{now}', '{now}');"""
+        sql="""INSERT INTO alarms VALUES ('{id}','{{ task_instance.xcom_pull(task_ids=\"select_random_account_data\",  key=\"return_value\")[0][0] }}', 'test_title', 'test_content', 'test_link', '{now}', '{now}');"""
     )
 
     t1 >> t2 >> t3
