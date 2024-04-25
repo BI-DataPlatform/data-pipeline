@@ -5,23 +5,7 @@ from airflow.operators.python import PythonOperator
 from uuid import uuid4
 from datetime import datetime, timedelta
 import random
-# schema는 mysql cli로 생성
-# CREATE TABLE alarms (
-# 	id VARCHAR(64) NOT NULL,
-# 	account_id VARCHAR(64) NOT NULL,
-# 	title VARCHAR(100) NULL,
-# 	content VARCHAR(500) NULL,
-# 	link VARCHAR(200) NULL,
-# 	created_on TIMESTAMP NULL,
-# 	last_updated_on TIMESTAMP NULL
-# );
-# CREATE TABLE favorites (
-# 	id	VARCHAR(64)	NOT NULL,
-# 	account_id	VARCHAR(64)	NOT NULL,
-# 	store_id	VARCHAR(64)	NOT NULL,
-# 	created_on	TIMESTAMP NULL,
-# 	last_updated_on	TIMESTAMP NULL
-# );
+
 
 id = uuid4().__str__()
 now = datetime.now().strftime("%Y-%m-%d %H:%M:%S").__str__()
@@ -66,3 +50,25 @@ with DAG(
     )
 
     t1 >> t2 >> t3
+    
+    
+    
+    
+    
+# schema는 mysql cli로 생성
+# CREATE TABLE alarms (
+# 	id VARCHAR(64) NOT NULL,
+# 	account_id VARCHAR(64) NOT NULL,
+# 	title VARCHAR(100) NULL,
+# 	content VARCHAR(500) NULL,
+# 	link VARCHAR(200) NULL,
+# 	created_on TIMESTAMP NULL,
+# 	last_updated_on TIMESTAMP NULL
+# );
+# CREATE TABLE favorites (
+# 	id	VARCHAR(64)	NOT NULL,
+# 	account_id	VARCHAR(64)	NOT NULL,
+# 	store_id	VARCHAR(64)	NOT NULL,
+# 	created_on	TIMESTAMP NULL,
+# 	last_updated_on	TIMESTAMP NULL
+# );
