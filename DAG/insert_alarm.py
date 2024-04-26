@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 import pendulum
 
 id = uuid4().__str__()
-now = datetime.now().strftime("%Y-%m-%d %H:%M:%S").__str__()
+# now = datetime.now().strftime("%Y-%m-%d %H:%M:%S").__str__()
 kst = pendulum.timezone("Asia/Seoul")
 start_time = datetime(2024, 4, 24, tzinfo=kst)
 
@@ -19,6 +19,7 @@ with DAG(
     start_date=start_time,
     schedule_interval = timedelta(minutes=3),  # scheduler interval 설정
     catchup = False,    # 과거 실행에서 누락된 작업 재실행 여부
+    user_defined_macros={'local_dt': lambda execution_date: execution_date.in_timezone(kst).strftime("%Y-%m-%d %H:%M:%S")},
     tags = ['mysql', 'test', 'alarms']
 ) as dag:
     
@@ -43,7 +44,8 @@ with DAG(
     t3 = MySqlOperator(
         task_id="insert_alarm_data",
         mysql_conn_id="mysql",
-        sql="INSERT INTO alarms VALUES ('{}','{{{{ task_instance.xcom_pull(task_ids=\"select_random_account_data\",  key=\"return_value\")[0][0] }}}}', 'test_title', 'test_content', 'test_link', '{}', '{}');".format(id, now, now)
+        sql="INSERT INTO alarms VALUES ('{}','{{{{ task_instance.xcom_pull(task_ids=\"select_random_account_data\", "
+            + "key=\"return_value\")[0][0] }}}}', 'test_title', 'test_content', 'test_link', '{{local_dt(execution_date)}}', '{{local_dt(execution_date)}}');".format(id)
     )
 
     t1 >> t3
