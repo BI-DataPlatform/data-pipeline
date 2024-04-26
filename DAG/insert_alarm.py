@@ -16,6 +16,7 @@ with DAG(
     description = """
         insert data to 'alarms' table
     """,
+    start_date=now,
     schedule_interval = timedelta(minutes=3),  # scheduler interval 설정
     catchup = False,    # 과거 실행에서 누락된 작업 재실행 여부
     tags = ['mysql', 'test', 'alarms']
