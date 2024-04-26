@@ -4,17 +4,15 @@ from airflow.operators.python import PythonOperator
 
 from uuid import uuid4
 from datetime import datetime, timedelta
-import random
+import pendulum
 
-default_args = {
-    'start_date': datetime.now()
-}
 id = uuid4().__str__()
-now = datetime.now().strftime("%Y-%m-%d %H:%M:%S").__str__()
+# now = datetime.now().strftime("%Y-%m-%d %H:%M:%S").__str__()
+kst = pendulum.timezone("Asia/Seoul")
+now = datetime(2024, 4, 24, tzinfo=kst)
 
 with DAG(
     'insert_alarm',
-    default_args = default_args,
     description = """
         insert data to 'alarms' table
     """,
