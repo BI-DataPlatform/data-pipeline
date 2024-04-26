@@ -34,3 +34,11 @@ CREATE TABLE IF NOT EXISTS addresses (
 	created_on	TIMESTAMP	NULL,
 	last_updated_on	TIMESTAMP	NULL
 );
+
+CREATE TABLE IF NOT EXISTS favorites (
+	id	VARCHAR(64)	NOT NULL,
+	account_id	VARCHAR(64)	NOT NULL,
+	store_id	VARCHAR(64)	NOT NULL,
+	created_on	TIMESTAMP	NULL,
+	last_updated_on	TIMESTAMP	NULL
+);
