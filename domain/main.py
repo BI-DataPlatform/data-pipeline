@@ -102,24 +102,6 @@ def generate_data(rows, connection: sqlalchemy.engine.Engine):
     address_df.to_sql(name='addresses', con=connection, index=False, if_exists='append')
 
 
-def generate_favorite(rows, engine: sqlalchemy.engine.Engine):
-    connection = engine.connect()
-    
-    account_ids = connection.execute("SELECT id FROM accounts ORDER BY RAND() LIMIT {};".format(rows))
-    store_ids = connection.execute("SELECT store_id FROM store ORDER BY RAND() LIMIT {};".format(rows))
-    connection.close()
-    ids = [(x[0], y[0]) for x, y in zip(account_ids, store_ids)]
-    favorites = []
-    for id in ids:
-        favorites.append(
-            Favorite(
-                account_id = id[0], 
-                store_id = id[1]
-            )
-        )
-
-    favorites_df = pd.DataFrame(favorites)
-    favorites_df.to_sql(name='favorites', con=engine, index=False, if_exists='append')
 
     
     
@@ -158,13 +140,13 @@ if __name__ == '__main__':
     generate_delivery_informations()
 
 
-    #2-1 계정테이블
+    #2-2 계정테이블
     generate_family_account()
     generate_alarms()
     generate_carts()
     generate_addresses()
 
-    #2-1 리뷰테이블
+    #2-3 리뷰테이블
     generate_replies()
     generate_review_tags()
 
